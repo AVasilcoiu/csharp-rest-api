@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using MessageBird.Net;
 using MessageBird.Net.ProxyConfigurationInjector;
@@ -513,21 +514,16 @@ namespace MessageBird
         public Objects.Verify CreateVerify(string recipient, VerifyOptionalArguments arguments = null)
         {
             ParameterValidator.IsNotNullOrWhiteSpace(recipient, "recipient");
-            var verify = new Objects.Verify(recipient, arguments);
-            return CreateVerify(verify);
+            
+            return CreateVerify(Convert.ToInt64(recipient), arguments);
         }
 
         public Objects.Verify CreateVerify(long recipient, VerifyOptionalArguments arguments = null)
         {
             var verify = new Objects.Verify(recipient, arguments);
-            return CreateVerify(verify);
-        }
-
-        private Objects.Verify CreateVerify(Objects.Verify verify)
-        {
             var verifyResource = new Resources.Verify(verify);
             var result = restClient.Create(verifyResource);
-            
+
             return result.Object as Objects.Verify;
         }
 
